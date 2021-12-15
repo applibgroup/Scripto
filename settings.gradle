@@ -1,1 +1,1 @@
-include ':sample-app', ':scripto'
+include ':entry', ':mylibrary'
