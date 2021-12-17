@@ -10,6 +10,8 @@ import java.util.logging.LogRecord;
 
 import com.example.mylibrary.java.JavaScriptSecure;
 import com.example.mylibrary.js.JavaScriptFunctionCall;
+import ohos.eventhandler.EventHandler;
+import ohos.eventhandler.EventRunner;
 
 public class ScriptoUtils {
 
@@ -64,6 +66,6 @@ public class ScriptoUtils {
     }
 
     public static void runOnUi(Runnable task) {
-        new Handler(Looper.getMainLooper()).post(task);
+        new EventHandler(EventRunner.getMainEventRunner()).postTask(task);
     }
 }

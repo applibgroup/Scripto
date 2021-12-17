@@ -41,11 +41,8 @@ public class ScriptoAssetsJavaScriptReader {
     }
 
     private InputStream getTextFileInputStream(String filePath) {
-        try {
-            return context.(filePath);
-        } catch (IOException e) {
-            return null;
-        }
+
+        return context.getClassloader().getResourceAsStream(filePath);
     }
 
     /**
