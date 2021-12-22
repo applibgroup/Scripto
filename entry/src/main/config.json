@@ -13,7 +13,7 @@
     "name": ".MyApplication",
     "mainAbility": "com.example.myapplication.MainAbility",
     "deviceType": [
-      "phone"
+      "phone","tablet"
     ],
     "distro": {
       "deliveryWithInstall": true,

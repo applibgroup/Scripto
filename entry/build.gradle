@@ -19,8 +19,11 @@ ohos {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.har'])
+    implementation project(path: ':mylibrary')
     testImplementation 'junit:junit:4.13'
+    implementation 'com.google.code.gson:gson:2.8.9'
     ohosTestImplementation 'com.huawei.ohos.testkit:runner:1.0.0.100'
+
 }
 decc {
     supportType = ['html','xml']
