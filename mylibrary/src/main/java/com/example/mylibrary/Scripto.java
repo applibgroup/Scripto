@@ -43,6 +43,9 @@ public class Scripto {
         this.jsonToJavaConverter = builder.jsonToJavaConverter;
 
         jsFiles = new ArrayList<>();
+//        if (this.webView== null){
+//            return;
+//        }
         scriptoAssetsJavaScriptReader = new ScriptoAssetsJavaScriptReader(webView.getContext());
 
         initWebView(builder);
@@ -177,10 +180,10 @@ public class Scripto {
 
     public static class Builder {
 
-        private WebView webView;
-        private ScriptoWebViewClient scriptoWebViewClient;
-        private JavaToJsonConverter javaToJsonConverter;
-        private JsonToJavaConverter jsonToJavaConverter;
+        public WebView webView;
+        public ScriptoWebViewClient scriptoWebViewClient;
+        public JavaToJsonConverter javaToJsonConverter;
+        public JsonToJavaConverter jsonToJavaConverter;
 
         public Builder(WebView webView) {
             this.webView = webView;
