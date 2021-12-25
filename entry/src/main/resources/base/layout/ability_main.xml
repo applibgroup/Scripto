@@ -7,12 +7,14 @@
     ohos:orientation="vertical">
 
    <Button
-       ohos:height="match_parent"
+       ohos:height="match_content"
        ohos:width="match_content"
+       ohos:top_margin="$ohos:float:id_card_margin_end"
        ohos:text="Show user info"
+       ohos:clickable="true"
        ohos:id="$+id:Click"
        />
-     <WebView
+     <ohos.agp.components.webengine.WebView
          ohos:id="$+id:webview"
          ohos:height="match_parent"
          ohos:width="match_parent"/>

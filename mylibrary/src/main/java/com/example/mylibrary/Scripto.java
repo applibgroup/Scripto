@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import com.example.mylibrary.converter.JavaToJsonConverter;
 import com.example.mylibrary.converter.JsonToJavaConverter;
-import com.example.mylibrary.java.JavaInterface;
 import com.example.mylibrary.java.JavaInterfaceConfig;
 import com.example.mylibrary.js.ScriptoProxy;
 import com.example.mylibrary.utils.ScriptoAssetsJavaScriptReader;
@@ -15,13 +14,15 @@ import com.example.mylibrary.utils.ScriptoAssetsJavaScriptReader;
 import com.example.mylibrary.utils.ScriptoUtils;
 import ohos.agp.components.webengine.JsCallback;
 import ohos.agp.components.webengine.WebView;
+import ohos.hiviewdfx.HiLog;
+import ohos.hiviewdfx.HiLogLabel;
 
 /**
  * Creates proxy objects for JS-scripts. Adds JavaScript interfaces.
  */
 public class Scripto {
 
-    private static final String ASSETS_FOLDER_PATH = "file:///harmony_asset/";
+    private static final String ASSETS_FOLDER_PATH = "dataability://com.example.myapplication.DataAbility/resources/rawfile/";
 
     public interface ErrorHandler {
         void onError(ScriptoException error);
@@ -37,16 +38,14 @@ public class Scripto {
     private ScriptoAssetsJavaScriptReader scriptoAssetsJavaScriptReader;
     private ArrayList<String> jsFiles;
 
-    private Scripto(Builder builder) {
+    public Scripto(Builder builder) {
         this.webView = builder.webView;
         this.javaToJsonConverter = builder.javaToJsonConverter;
         this.jsonToJavaConverter = builder.jsonToJavaConverter;
 
         jsFiles = new ArrayList<>();
-//        if (this.webView== null){
-//            return;
-//        }
-        scriptoAssetsJavaScriptReader = new ScriptoAssetsJavaScriptReader(webView.getContext());
+
+        scriptoAssetsJavaScriptReader = new ScriptoAssetsJavaScriptReader(this.webView.getContext());
 
         initWebView(builder);
     }
@@ -180,14 +179,14 @@ public class Scripto {
 
     public static class Builder {
 
-        public WebView webView;
-        public ScriptoWebViewClient scriptoWebViewClient;
-        public JavaToJsonConverter javaToJsonConverter;
-        public JsonToJavaConverter jsonToJavaConverter;
+        private static final HiLogLabel LABEL_LOG = new HiLogLabel(HiLog.LOG_APP, 0x00201, "Logger Webview");
+        private WebView webView;
+        private ScriptoWebViewClient scriptoWebViewClient;
+        private JavaToJsonConverter javaToJsonConverter;
+        private JsonToJavaConverter jsonToJavaConverter;
 
         public Builder(WebView webView) {
             this.webView = webView;
-
             this.scriptoWebViewClient = new ScriptoWebViewClient();
             this.javaToJsonConverter = new JavaToJsonConverter();
             this.jsonToJavaConverter = new JsonToJavaConverter();

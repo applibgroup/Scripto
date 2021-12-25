@@ -4,8 +4,6 @@ package com.example.mylibrary.utils;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 
 import com.example.mylibrary.java.JavaScriptSecure;

@@ -12,6 +12,13 @@
     "package": "com.example.myapplication",
     "name": ".MyApplication",
     "mainAbility": "com.example.myapplication.MainAbility",
+    "reqPermissions": [
+
+      {
+
+        "name": "ohos.permission.INTERNET"
+
+      }],
     "deviceType": [
       "phone","tablet"
     ],
@@ -23,6 +30,7 @@
     },
     "abilities": [
       {
+
         "skills": [
           {
             "entities": [
@@ -40,7 +48,18 @@
         "label": "$string:entry_MainAbility",
         "type": "page",
         "launchType": "standard"
-      }
+
+      },
+
+        {
+          "name": "com.example.myapplication.DataAbility",
+          "type": "data",
+          "uri": "dataability://com.example.myapplication.DataAbility",
+          "permissions": [
+            "com.example.myapplication.DataAbility.DATA"
+          ]
+        }
+
     ]
   }
 }

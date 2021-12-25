@@ -1,5 +1,5 @@
 function loadUserData() {
-    PreferencesInterface.getUserData(function(userJson) {
+   PreferencesInterface.getUserData(function(userJson) {
         var user = JSON.parse(userJson);
         document.getElementById('name_field').value = user.name;
         document.getElementById('surname_field').value = user.surname;
@@ -12,7 +12,7 @@ function loadUserData() {
 function saveUserData() {
     var user = getUserData();
     PreferencesInterface.saveUserData(user);
-    AndroidInterface.showToastMessage("Saved");
+    HarmonyInterface.showToastMessage("Saved");
 }
 
 function getUserData() {

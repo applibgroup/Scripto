@@ -2,7 +2,6 @@ package com.example.mylibrary.java;
 
 
 import org.devio.hi.json.HiJson;
-import org.devio.hi.json.JSONException;
 
 class JavaArguments {
 

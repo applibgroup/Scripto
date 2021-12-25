@@ -16,10 +16,15 @@ import ohos.aafwk.ability.AbilitySlice;
 import ohos.aafwk.content.Intent;
 import ohos.agp.components.Button;
 import ohos.agp.components.Component;
+import ohos.agp.components.webengine.ResourceRequest;
+import ohos.agp.components.webengine.WebAgent;
+import ohos.agp.components.webengine.WebConfig;
 import ohos.agp.components.webengine.WebView;
 import ohos.agp.window.dialog.ToastDialog;
 import ohos.hiviewdfx.HiLog;
 import ohos.hiviewdfx.HiLogLabel;
+
+import static ohos.data.search.schema.PhotoItem.TAG;
 
 public class MainAbilitySlice extends AbilitySlice {
     private Scripto scripto;
@@ -30,13 +35,12 @@ public class MainAbilitySlice extends AbilitySlice {
         super.onStart(intent);
         super.setUIContent(ResourceTable.Layout_ability_main);
         WebView webView = (WebView) findComponentById(ResourceTable.Id_webview);
-        Button btn = (Button)  findComponentById(ResourceTable.Id_Click);
+
+            Button btn = (Button)  findComponentById(ResourceTable.Id_Click);
         btn.setClickedListener(new Component.ClickedListener() {
             @Override
-            public void onClick(Component component) {
-                showUserInfo();
-            }
-        });
+            public void onClick(Component component) { showUserInfo(); }});
+      // Logger.ge.info("Main___TEST"+webView.getName());
 
         scripto = new Scripto.Builder(webView).build();
         scripto.addInterface("Harmony", new HarmonyInterface(this), new JavaInterfaceConfig().enableAnnotationProtection(true));
@@ -62,16 +66,37 @@ public class MainAbilitySlice extends AbilitySlice {
                 HiLog.debug(LABEL, "Scripto is prepared");
             }
         });
+        webView.setWebAgent(new WebAgent() {
+            @Override
+            public boolean isNeedLoadUrl(WebView webView, ResourceRequest request) {
+                if (request == null || request.getRequestUrl() == null) {
+                   // LogUtil.info(TAG,"WebAgent isNeedLoadUrl:request is null.");
+                    return false;
+                }
+                String url = request.getRequestUrl().toString();
+                if (url.startsWith("http:") || url.startsWith("https:")) {
+                    webView.load(url);
+                    return false;
+                } else {
+                    return super.isNeedLoadUrl(webView, request);
+                }
+            }
+        });
+        //String html = AssetsReader.readFileAsText(this, "test.html");
+        WebConfig webConfig = webView.getWebConfig();
+        webConfig.setDataAbilityPermit(true);
 
-        String html = AssetsReader.readFileAsText(this, "test.html");
-        webView.load("file:///android_asset/", html, "text/html", "utf-8", null);
+        webView.load( "dataability://com.example.myapplication.DataAbility/resources/rawfile/test.html");
+
     }
     public void showUserInfo() {
+
         userInfoScript.getUser()
                 .onResponse(new JavaScriptCallResponseCallback<User>() {
                     @Override
                     public void onResponse(User user) {
-                        new ToastDialog(getApplicationContext()).setText(user.getUserInfo()).show();
+                        new ToastDialog(getApplicationContext()).setText("adc").show();
+                        new ToastDialog(getApplicationContext()).setText("adc"+user.getUserInfo()).show();
 
                     }
                 }).onError(new JavaScriptCallErrorCallback() {

@@ -2,7 +2,6 @@ package com.example.mylibrary.utils;
 
 
 
-import ohos.app.AbilityContext;
 import ohos.app.Context;
 
 import java.io.BufferedReader;
