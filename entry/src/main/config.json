@@ -1,0 +1,65 @@
+{
+  "app": {
+    "bundleName": "com.example.myapplication",
+    "vendor": "example",
+    "version": {
+      "code": 1000000,
+      "name": "1.0.0"
+    }
+  },
+  "deviceConfig": {},
+  "module": {
+    "package": "com.example.myapplication",
+    "name": ".MyApplication",
+    "mainAbility": "com.example.myapplication.MainAbility",
+    "reqPermissions": [
+
+      {
+
+        "name": "ohos.permission.INTERNET"
+
+      }],
+    "deviceType": [
+      "phone","tablet","tv"
+    ],
+    "distro": {
+      "deliveryWithInstall": true,
+      "moduleName": "entry",
+      "moduleType": "entry",
+      "installationFree": true
+    },
+    "abilities": [
+      {
+
+        "skills": [
+          {
+            "entities": [
+              "entity.system.home"
+            ],
+            "actions": [
+              "action.system.home"
+            ]
+          }
+        ],
+        "orientation": "unspecified",
+        "name": "com.example.myapplication.MainAbility",
+        "icon": "$media:icon",
+        "description": "$string:mainability_description",
+        "label": "$string:entry_MainAbility",
+        "type": "page",
+        "launchType": "standard"
+
+      },
+
+        {
+          "name": "com.example.myapplication.DataAbility",
+          "type": "data",
+          "uri": "dataability://com.example.myapplication.DataAbility",
+          "permissions": [
+            "com.example.myapplication.DataAbility.DATA"
+          ]
+        }
+
+    ]
+  }
+}

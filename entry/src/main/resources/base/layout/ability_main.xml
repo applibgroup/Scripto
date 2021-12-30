@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DirectionalLayout
+    xmlns:ohos="http://schemas.huawei.com/res/ohos"
+    ohos:height="match_parent"
+    ohos:width="match_parent"
+    ohos:alignment="center"
+    ohos:orientation="vertical">
+
+   <Button
+       ohos:height="match_content"
+       ohos:width="match_content"
+       ohos:top_margin="$ohos:float:id_card_margin_end"
+       ohos:text="Show user info"
+       ohos:clickable="true"
+       ohos:id="$+id:Click"
+       />
+     <ohos.agp.components.webengine.WebView
+         ohos:id="$+id:webview"
+         ohos:height="match_parent"
+         ohos:width="match_parent"/>
+</DirectionalLayout>
