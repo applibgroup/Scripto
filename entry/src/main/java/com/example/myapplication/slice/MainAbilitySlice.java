@@ -40,16 +40,19 @@ public class MainAbilitySlice extends AbilitySlice {
         btn.setClickedListener(new Component.ClickedListener() {
             @Override
             public void onClick(Component component) { showUserInfo(); }});
-      // Logger.ge.info("Main___TEST"+webView.getName());
+
 
         scripto = new Scripto.Builder(webView).build();
+
         scripto.addInterface("Harmony", new HarmonyInterface(this), new JavaInterfaceConfig().enableAnnotationProtection(true));
         scripto.addInterface("Preferences", new PreferencesInterface(this), new JavaInterfaceConfig());
-        scripto.addJsFileFromAssets("scripto/scripto.js");
-        scripto.addJsFileFromAssets("interfaces/android_interface.js");
-        scripto.addJsFileFromAssets("interfaces/preferences_interface.js");
-        scripto.addJsFileFromAssets("test.js");
-
+        scripto.addJsFileFromAssets("dataability://com.example.myapplication.DataAbility/resources/rawfile/scripto/scripto.js");
+        scripto.addJsFileFromAssets("dataability://com.example.myapplication.DataAbility/resources/rawfile/interfaces/harmony_interface.js");
+        scripto.addJsFileFromAssets("dataability://com.example.myapplication.DataAbility/resources/rawfile/interfaces/preferences_interface.js");
+        scripto.addJsFileFromAssets("dataability://com.example.myapplication.DataAbility/resources/rawfile/test.js");
+        WebConfig webConfig = webView.getWebConfig();
+        webConfig.setDataAbilityPermit(true);
+        webConfig.setJavaScriptPermit(true);
         userInfoScript = scripto.create(UserInfoScript.class);
         scripto.onError(new Scripto.ErrorHandler() {
 
@@ -63,40 +66,25 @@ public class MainAbilitySlice extends AbilitySlice {
         scripto.onPrepared(new ScriptoPrepareListener() {
             @Override
             public void onScriptoPrepared() {
-                HiLog.debug(LABEL, "Scripto is prepared");
+                new ToastDialog(getApplicationContext()).setText( "Scripto is prepared").show();
             }
         });
-        webView.setWebAgent(new WebAgent() {
-            @Override
-            public boolean isNeedLoadUrl(WebView webView, ResourceRequest request) {
-                if (request == null || request.getRequestUrl() == null) {
-                   // LogUtil.info(TAG,"WebAgent isNeedLoadUrl:request is null.");
-                    return false;
-                }
-                String url = request.getRequestUrl().toString();
-                if (url.startsWith("http:") || url.startsWith("https:")) {
-                    webView.load(url);
-                    return false;
-                } else {
-                    return super.isNeedLoadUrl(webView, request);
-                }
-            }
-        });
-        //String html = AssetsReader.readFileAsText(this, "test.html");
-        WebConfig webConfig = webView.getWebConfig();
-        webConfig.setDataAbilityPermit(true);
 
-        webView.load( "dataability://com.example.myapplication.DataAbility/resources/rawfile/test.html");
+
+        String html = AssetsReader.readFileAsText(this, "test.html");
+
+
+        webView.load(  html, "text/html", "UTF-8","dataability://com.example.myapplication.DataAbility/resources/rawfile/", null);
 
     }
     public void showUserInfo() {
-
+        userInfoScript.getUser().call();
         userInfoScript.getUser()
                 .onResponse(new JavaScriptCallResponseCallback<User>() {
                     @Override
                     public void onResponse(User user) {
-                        new ToastDialog(getApplicationContext()).setText("adc").show();
-                        new ToastDialog(getApplicationContext()).setText("adc"+user.getUserInfo()).show();
+
+                        new ToastDialog(getApplicationContext()).setText(user.getUserInfo()).show();
 
                     }
                 }).onError(new JavaScriptCallErrorCallback() {

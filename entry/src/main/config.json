@@ -20,7 +20,7 @@
 
       }],
     "deviceType": [
-      "phone","tablet"
+      "phone","tablet","tv"
     ],
     "distro": {
       "deliveryWithInstall": true,

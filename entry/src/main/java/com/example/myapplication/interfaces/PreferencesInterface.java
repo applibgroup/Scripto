@@ -19,6 +19,7 @@ public class PreferencesInterface {
     }
 
     public void saveUserData(User user) {
+
         prefs.putString("user_name", user.getName());
         prefs.putString("user_surname", user.getSurname());
         prefs.putInt("user_age", user.getAge());

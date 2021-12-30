@@ -12,7 +12,7 @@
   "module": {
     "package": "com.example.mylibrary",
     "deviceType": [
-      "phone"
+      "phone","tablet"
     ],
     "distro": {
       "deliveryWithInstall": true,

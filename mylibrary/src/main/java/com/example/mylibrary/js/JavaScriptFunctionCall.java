@@ -1,5 +1,9 @@
 package com.example.mylibrary.js;
 
+import com.example.mylibrary.ScriptoLogUtils;
+
+import java.util.logging.Logger;
+
 public class JavaScriptFunctionCall<T> {
 
     private JavaScriptFunction javaScriptFunction;
@@ -57,6 +61,7 @@ public class JavaScriptFunctionCall<T> {
     }
 
     public void call() {
+
         javaScriptFunction.callJavaScriptFunction(callId);
     }
 

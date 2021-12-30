@@ -1,4 +1,4 @@
-var Scripto = new function() {
+var Scripto = new function(){
 
     var scriptoCallbacks = {};
 
@@ -39,16 +39,20 @@ var Scripto = new function() {
 
     // Calls Java method and passes him function name with arguments
     this.call = function(interfaceName, args) {
-        window[interfaceName].call(getFunctionName(), argsToJson(args));
+
+        window[interfaceName].call(getFunctionName() +"-"+ argsToJson(args));
     };
 
     // Calls Java method and passes him function name with arguments and callback identifier
     this.callWithCallback = function(interfaceName, args) {
+
         if (args.length == 0) {
+
             throw "Function must have at least one argument!"
         }
         var callback = args[args.length - 1];
         if (typeof callback !== "function") {
+
             throw "Last argument must be a callback function!"
         }
 

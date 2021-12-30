@@ -11,6 +11,7 @@ import com.example.mylibrary.Scripto;
 import com.example.mylibrary.ScriptoException;
 import com.example.mylibrary.ScriptoLogUtils;
 import com.example.mylibrary.utils.ScriptoUtils;
+import org.devio.hi.json.JSONException;
 
 
 /**
@@ -39,7 +40,11 @@ public class JavaInterface {
         ScriptoUtils.runOnUi(new Runnable() {
             @Override
             public void run() {
-                callMethod(methodName, jsonArgs);
+                try {
+                    callMethod(methodName, jsonArgs);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
@@ -49,7 +54,12 @@ public class JavaInterface {
         ScriptoUtils.runOnUi(new Runnable() {
             @Override
             public void run() {
-                Object response = callMethod(methodName, jsonArgs);
+                Object response = null;
+                try {
+                    response = callMethod(methodName, jsonArgs);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 String responseJson = response == null ? "null" : scripto.getJavaToJsonConverter().convertToString(response, response.getClass());
                 String responseCall = String.format("Scripto.removeCallBack('%s', '%s')", callbackCode, responseJson);
                 scripto.getWebView().load("javascript:" + responseCall);
@@ -57,7 +67,7 @@ public class JavaInterface {
         });
     }
 
-    private Object callMethod(String methodName, String jsonArgs) {
+    private Object callMethod(String methodName, String jsonArgs) throws JSONException {
         //получаем аргументы метода
         JavaArguments args = new JavaArguments(jsonArgs);
         //получаем метод по имени и типам аргументов

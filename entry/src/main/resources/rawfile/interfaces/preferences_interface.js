@@ -1,6 +1,7 @@
 var PreferencesInterface = {
 
     saveUserData: function(user) {
+
         Scripto.call('Preferences', arguments);
     },
 

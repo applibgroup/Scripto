@@ -4,14 +4,18 @@ package com.example.mylibrary;
 
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.logging.Logger;
 
 import com.example.mylibrary.converter.JavaToJsonConverter;
 import com.example.mylibrary.converter.JsonToJavaConverter;
+import com.example.mylibrary.java.JavaInterface;
 import com.example.mylibrary.java.JavaInterfaceConfig;
 import com.example.mylibrary.js.ScriptoProxy;
 import com.example.mylibrary.utils.ScriptoAssetsJavaScriptReader;
 
 import com.example.mylibrary.utils.ScriptoUtils;
+import ohos.agp.components.webengine.AsyncCallback;
 import ohos.agp.components.webengine.JsCallback;
 import ohos.agp.components.webengine.WebView;
 import ohos.hiviewdfx.HiLog;
@@ -22,7 +26,7 @@ import ohos.hiviewdfx.HiLogLabel;
  */
 public class Scripto {
 
-    private static final String ASSETS_FOLDER_PATH = "dataability://com.example.myapplication.DataAbility/resources/rawfile/";
+   // private static final String ASSETS_FOLDER_PATH = "dataability://com.example.myapplication.DataAbility/resources/rawfile/";
 
     public interface ErrorHandler {
         void onError(ScriptoException error);
@@ -52,34 +56,22 @@ public class Scripto {
 
     private void initWebView(Builder builder) {
         ScriptoWebViewClient scriptoWebViewClient = builder.scriptoWebViewClient;
+
         scriptoWebViewClient.setOnPageLoadedListener(new ScriptoWebViewClient.OnPageLoadedListener() {
             @Override
-            public void onPageLoaded() {
+            public void onPageLoaded1() {
+
                 addJsScripts();
             }
         });
         webView.setWebAgent(scriptoWebViewClient);
 
-        webView.getWebConfig().setJavaScriptPermit(true);
-        //waits for the Scripto's readiness to work
-        webView.addJsCallback("",new JsCallback() {
 
-            @Override
-            public String onCallback(String s) {
-                ScriptoUtils.runOnUi(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (prepareListener != null) {
-                            prepareListener.onScriptoPrepared();
-                        }
-                    }
-                });
-                return null;
-            }
-        });
+        webView.getWebConfig().setJavaScriptPermit(true);
     }
 
-    private void addJsScripts() {
+    public void addJsScripts() {
+
         StringBuilder jsScriptsListBuilder = new StringBuilder();
 
         int scriptsCount = jsFiles.size();
@@ -89,20 +81,36 @@ public class Scripto {
             boolean isLasElement = i < scriptsCount - 1;
             if (isLasElement) {
                 jsScriptsListBuilder.append(", ");
+
             }
         }
 
-        webView.load(
+        this.webView.executeJs(
                 "javascript:(function() {" +
-                "   var jsFiles = [" + jsScriptsListBuilder.toString() + "];" +
-                "    " +
-                "   jsFiles.forEach(function(jsFile, i, jsFiles) {" +
-                "       var jsScript = document.createElement(\"script\");" +
-                "       jsScript.setAttribute(\"src\", jsFile);" +
-                "       document.head.appendChild(jsScript);" +
-                "   });" +
-                "   ScriptoPreparedListener.onScriptoPrepared();" + //notify java-library about readiness for work
-                "})();");
+                        "   var jsFiles = [" + jsScriptsListBuilder.toString() + "];" +
+                        "    " +
+                        "   jsFiles.forEach(function(jsFile, i, jsFiles) {" +
+                        "       var jsScript = document.createElement(\"script\");" +
+                        "       jsScript.setAttribute(\"src\", jsFile);" +
+                        "       document.head.appendChild(jsScript);" +
+                        "   });" +
+                        "   ScriptoPreparedListener.onScriptoPrepared();" + //notify java-library about readiness for work
+                        "})();", new AsyncCallback<String>() {
+                    @Override
+                    public void onReceive(String s) {
+
+                        ScriptoUtils.runOnUi(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                if (prepareListener != null) {
+                                    prepareListener.onScriptoPrepared();
+                                }
+                            }
+
+                        });
+                    }
+                });
     }
 
     public void addJsFile(String filePath) {
@@ -110,7 +118,7 @@ public class Scripto {
     }
 
     public void addJsFileFromAssets(String filePath) {
-        jsFiles.add(ASSETS_FOLDER_PATH + filePath);
+        jsFiles.add(filePath);
     }
 
     /**
@@ -141,6 +149,7 @@ public class Scripto {
     }
 
     public void addInterface(String tag, Object jsInterface, JavaInterfaceConfig config) {
+        Scripto ctx = this;
         if (tag == null) {
             throw new NullPointerException("Tag can't be null");
         }
@@ -153,9 +162,21 @@ public class Scripto {
             throw new NullPointerException("Config object can't be null");
         }
 
+
         webView.addJsCallback(tag, new JsCallback() {
             @Override
             public String onCallback(String s) {
+                try {
+
+                    String[] args =s.split("-");
+                    Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info("WWWW ->"+ args[1]);
+                    new JavaInterface(ctx, tag, jsInterface, config).call(args[0], args[1]);
+                }catch (NullPointerException e){
+                    throw new NullPointerException("Data can't be null");
+                }
+
+
+
                 return null;
             }
         });

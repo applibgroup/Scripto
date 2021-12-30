@@ -10,7 +10,9 @@ function loadUserData() {
 }
 
 function saveUserData() {
+
     var user = getUserData();
+
     PreferencesInterface.saveUserData(user);
     HarmonyInterface.showToastMessage("Saved");
 }
@@ -30,7 +32,6 @@ function getUserData() {
         married: marriedField.checked
 
     };
-
     return JSON.stringify(user);
 }
 

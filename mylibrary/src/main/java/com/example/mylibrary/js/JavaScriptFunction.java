@@ -1,9 +1,10 @@
 package com.example.mylibrary.js;
 
 import com.example.mylibrary.Scripto;
+import ohos.agp.components.webengine.AsyncCallback;
 
 import java.lang.reflect.Method;
-
+import java.util.logging.Logger;
 
 
 /**
@@ -60,6 +61,7 @@ class JavaScriptFunction {
      * @param callId - unique identifier of call
      */
     public void callJavaScriptFunction(String callId) {
+
         String jsCall = "javascript:"
                 + "(function(){"
                 + "	 try {"
@@ -69,7 +71,13 @@ class JavaScriptFunction {
                 +       proxyId + ".onCallbackError('" + callId + "', err.message);"
                 + "	 }"
                 + "})();";
-        scripto.getWebView().load(jsCall);
+        Logger.getLogger(Logger.GLOBAL_LOGGER_NAME).info(jsCall);
+        scripto.getWebView().executeJs(jsCall, new AsyncCallback<String>() {
+            @Override
+            public void onReceive(String s) {
+
+            }
+        });
     }
 
 }
